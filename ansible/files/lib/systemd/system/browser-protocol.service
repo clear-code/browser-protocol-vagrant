@@ -1,0 +1,15 @@
+[Unit]
+Description=Browser protocol - Headless broweser protocol service
+After=network.target
+
+[Service]
+Type=simple
+User=vagrant
+Group=vagrant
+WorkingDirectory=/home/vagrant
+EnvironmentFile=/etc/sysconfig/browser-protocol
+ExecStart=/usr/bin/chromium-browser --headless --disable-gpu --remote-debugging-port=9222
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

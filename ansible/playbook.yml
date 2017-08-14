@@ -1,0 +1,63 @@
+# Copyright (C) 2017  Kouhei Sutou <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+- hosts: servers
+  become: yes
+  tasks:
+    - name: Set timezone
+      # Ansible 2.2 is required
+      # timezone:
+      #   name: Asia/Tokyo
+      command: timedatectl set-timezone Asia/Tokyo
+    - name: Enable NTP
+      command: timedatectl set-ntp true
+    - name: Install epel-release
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - epel-release
+    - name: Install Chromium browser
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - google-noto-sans-cjk-fonts
+        - chromium
+    - name: Setup configuration file
+      copy:
+        src: etc/sysconfig/{{ item }}
+        dest: /etc/sysconfig/{{ item }}
+      with_items:
+        - browser-protocol
+    - name: Enable systemd service
+      copy:
+        src: lib/systemd/system/{{ item }}
+        dest: /lib/systemd/system/{{ item }}
+      with_items:
+        - browser-protocol.service
+      notify:
+        - Reload systemd
+        - Reload Browser protocol server
+
+  handlers:
+    - name: Reload systemd
+      command: systemctl daemon-reload
+    - name: Reload Browser protocol server
+      service:
+        name: browser-protocol
+        enabled: yes
+        state: restarted
