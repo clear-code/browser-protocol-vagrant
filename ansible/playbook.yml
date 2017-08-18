@@ -35,7 +35,7 @@
     - name: Set proper permission to key
       command: chmod 600 /home/vagrant/.ssh/login.rsa
     - name: Set empty passphrase key as authorized
-      command: cat /home/vagrant/.ssh/login.rsa.pub >> /home/vagrant/.ssh/authorized_keys
+      shell: cat /home/vagrant/.ssh/login.rsa.pub >> /home/vagrant/.ssh/authorized_keys
     - name: Setup configuration file
       copy:
         src: etc/default/{{ item }}
