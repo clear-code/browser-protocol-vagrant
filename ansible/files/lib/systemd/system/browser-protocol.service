@@ -7,8 +7,8 @@ Type=simple
 User=vagrant
 Group=vagrant
 WorkingDirectory=/home/vagrant
-EnvironmentFile=/etc/sysconfig/browser-protocol
-ExecStart=/usr/bin/chromium-browser --headless --disable-gpu --remote-debugging-port=9222
+EnvironmentFile=/etc/default/browser-protocol
+ExecStart=/usr/bin/chromium-browser --headless --disable-gpu --remote-debugging-port=${REMOTE_DEBUGGING_PORT}
 Restart=always
 
 [Install]
