@@ -20,7 +20,7 @@
 Vagrant.configure("2") do |config|
   name = "browser-protocol"
   config.vm.define(name) do |node|
-    node.vm.box = "bento/centos-7.3"
+    node.vm.box = "bento/ubuntu-17.04-i386"
     node.vm.network "forwarded_port", guest: 9222, host: 19222
 
     node.vm.provider "virtualbox" do |virtualbox|
