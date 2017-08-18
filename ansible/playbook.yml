@@ -32,8 +32,15 @@
         - chromium-browser
     - name: Create empty passphrase key
       command: ssh-keygen -f /home/vagrant/.ssh/login.rsa -t rsa -N ''
-    - name: Set proper permission to key
-      command: chmod 600 /home/vagrant/.ssh/login.rsa
+    - name: Set proper ownership to key
+      file:
+        path: "{{ item }}"
+        owner: vagrant
+        group: vagrant
+        mode: 0600
+      with_items:
+        - /home/vagrant/.ssh/login.rsa
+        - /home/vagrant/.ssh/login.rsa.pub
     - name: Set empty passphrase key as authorized
       shell: cat /home/vagrant/.ssh/login.rsa.pub >> /home/vagrant/.ssh/authorized_keys
     - name: Setup configuration file
