@@ -59,6 +59,7 @@
       notify:
         - Reload systemd
         - Reload Browser protocol server
+        - Reload Browser protocol tunnel
 
   handlers:
     - name: Reload systemd
@@ -66,5 +67,10 @@
     - name: Reload Browser protocol server
       service:
         name: browser-protocol
+        enabled: yes
+        state: restarted
+    - name: Reload Browser protocol tunnel
+      service:
+        name: browser-protocol-tunnel
         enabled: yes
         state: restarted
