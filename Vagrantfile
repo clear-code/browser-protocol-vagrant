@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
   config.vm.define(name) do |node|
     node.vm.box = "bento/ubuntu-17.04-i386"
     node.vm.network "forwarded_port", guest: 9222, host: 19222
+    node.vm.network :public_network, :bridge => ENV["VAGRANT_BRIDGE"]
 
     node.vm.provider "virtualbox" do |virtualbox|
       virtualbox.memory = "2048"
