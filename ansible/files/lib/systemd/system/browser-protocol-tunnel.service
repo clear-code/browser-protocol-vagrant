@@ -7,7 +7,7 @@ Type=simple
 User=vagrant
 WorkingDirectory=/home/vagrant
 EnvironmentFile=/etc/default/browser-protocol
-ExecStart=/usr/bin/ssh -i /home/vagrant/.ssh/login.rsa -L 0.0.0.0:${REMOTE_TUNNEL_PORT}:localhost:${REMOTE_DEBUGGING_PORT} localhost -N 
+ExecStart=/usr/bin/ssh -i /home/vagrant/.ssh/login.rsa -o StrictHostKeyChecking=no -L 0.0.0.0:${REMOTE_TUNNEL_PORT}:localhost:${REMOTE_DEBUGGING_PORT} localhost -N 
 Restart=always
 
 [Install]
