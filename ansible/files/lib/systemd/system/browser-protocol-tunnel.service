@@ -1,0 +1,14 @@
+[Unit]
+Description=Browser protocol tunnel - Tunnel default browser protocol port
+After=network.target
+
+[Service]
+Type=simple
+User=vagrant
+WorkingDirectory=/home/vagrant
+EnvironmentFile=/etc/default/browser-protocol
+ExecStart=/usr/bin/ssh -i /home/vagrant/.ssh/login.rsa -L 0.0.0.0:${REMOTE_TUNNEL_PORT}:localhost:${REMOTE_DEBUGGING_PORT} localhost -N 
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
