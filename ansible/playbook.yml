@@ -24,23 +24,22 @@
       command: timedatectl set-timezone Asia/Tokyo
     - name: Enable NTP
       command: timedatectl set-ntp true
-    - name: Install epel-release
-      yum:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - epel-release
     - name: Install Chromium browser
-      yum:
+      apt:
         name: "{{ item }}"
-        state: present
       with_items:
-        - google-noto-sans-cjk-fonts
-        - chromium
+        - fonts-noto-cjk
+        - chromium-browser
+    - name: Create empty passphrase key
+      command: ssh-keygen -f /home/vagrant/.ssh/login.rsa -t rsa -N ''
+    - name: Set proper permission to key
+      command: chmod 600 /home/vagrant/.ssh/login.rsa
+    - name: Set empty passphrase key as authorized
+      command: cat /home/vagrant/.ssh/login.rsa.pub >> /home/vagrant/.ssh/authorized_keys
     - name: Setup configuration file
       copy:
-        src: etc/sysconfig/{{ item }}
-        dest: /etc/sysconfig/{{ item }}
+        src: etc/default/{{ item }}
+        dest: /etc/default/{{ item }}
       with_items:
         - browser-protocol
     - name: Enable systemd service
@@ -49,6 +48,7 @@
         dest: /lib/systemd/system/{{ item }}
       with_items:
         - browser-protocol.service
+        - browser-protocol-tunnel.service
       notify:
         - Reload systemd
         - Reload Browser protocol server
