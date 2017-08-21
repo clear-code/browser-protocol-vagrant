@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   name = "browser-protocol"
   config.vm.define(name) do |node|
     node.vm.box = "bento/ubuntu-17.04-i386"
-    node.vm.network :public_network, :bridge => ENV["VAGRANT_BRIDGE"]
+    node.vm.network :private_network, :ip => "192.168.92.22"
 
     node.vm.provider "virtualbox" do |virtualbox|
       virtualbox.memory = "2048"
