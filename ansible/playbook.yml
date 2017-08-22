@@ -63,10 +63,12 @@
       with_items:
         - browser-protocol.service
         - browser-protocol-tunnel.service
+        - vsftpd.service
       notify:
         - Reload systemd
         - Reload Browser protocol server
         - Reload Browser protocol tunnel
+        - Reload vsftpd
 
   handlers:
     - name: Reload systemd
@@ -79,5 +81,10 @@
     - name: Reload Browser protocol tunnel
       service:
         name: browser-protocol-tunnel
+        enabled: yes
+        state: restarted
+    - name: Reload vsftpd
+      service:
+        name: vsftpd
         enabled: yes
         state: restarted
