@@ -50,6 +50,12 @@
         dest: /etc/default/{{ item }}
       with_items:
         - browser-protocol
+    - name: Copy vsftpd configuration file
+      copy:
+        src: etc/{{ item }}
+        dest: /etc/{{ item }}
+      with_items:
+        - vsftpd.conf
     - name: Enable systemd service
       copy:
         src: lib/systemd/system/{{ item }}
