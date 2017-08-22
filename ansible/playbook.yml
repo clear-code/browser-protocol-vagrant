@@ -24,7 +24,7 @@
       command: timedatectl set-timezone Asia/Tokyo
     - name: Enable NTP
       command: timedatectl set-ntp true
-    - name: Install Chromium browser
+    - name: Install required packages
       apt:
         name: "{{ item }}"
       with_items:
