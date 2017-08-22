@@ -63,7 +63,6 @@
       with_items:
         - browser-protocol.service
         - browser-protocol-tunnel.service
-        - vsftpd.service
       notify:
         - Reload systemd
         - Reload Browser protocol server
