@@ -32,11 +32,11 @@ function save_xml(connection_spec, xml)
   local pg = pgmoon.new(parsed_connection_spec)
   assert(pg:connect())
 
-  assert(pg:query("CREATE TABLE IF NOT EXISTS converted_xml_contents("..
+  assert(pg:query("CREATE TABLE IF NOT EXISTS converted_xml("..
                   "id serial,"..
                   "xml xml"..
                   ");"))
-  assert(pg:query("INSERT INTO converted_xml_contents (xml)"..
+  assert(pg:query("INSERT INTO converted_xml (xml)"..
                   "VALUES (XMLPARSE(DOCUMENT " .. pg:escape_literal(xml) .. "))"))
 end
 
