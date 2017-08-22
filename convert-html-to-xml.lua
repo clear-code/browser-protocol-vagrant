@@ -32,11 +32,11 @@ function save_xml(connection_spec, xml)
   local pg = pgmoon.new(parsed_connection_spec)
   assert(pg:connect())
 
-  assert(pg:query("CREATE TABLE IF NOT EXISTS contents("..
+  assert(pg:query("CREATE TABLE IF NOT EXISTS converted_xml_contents("..
                   "id serial,"..
-                  "xml text"..
+                  "xml xml"..
                   ");"))
-  assert(pg:query("INSERT INTO contents (xml)"..
+  assert(pg:query("INSERT INTO converted_xml_contents (xml)"..
                   "VALUES (XMLPARSE(DOCUMENT " .. pg:escape_literal(xml) .. "))"))
 end
 
@@ -73,7 +73,6 @@ client:close()
 client = chrome_devtools.connect(connect_ip, connect_port)
 xml = client:convert_html_to_xml()
 save_xml(arg[1], xml)
-print(xml)
-print("Save XML finished")
 client:close()
 assert(os.remove(shared_directory_path.."in.html"))
+os.exit(0)
