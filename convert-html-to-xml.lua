@@ -6,16 +6,16 @@ function split_text(text, delimiter)
     return { text }
   end
 
-  local splited_text = {}
+  local splited_texts = {}
   local last_position
 
-  for synonym, position in text:gmatch("(.-)"..delimiter.."()") do
-    table.insert(splited_text, synonym)
+  for splited_text, position in text:gmatch("(.-)"..delimiter.."()") do
+    table.insert(splited_texts, splited_text)
     last_position = position
   end
-  table.insert(splited_text, string.sub(text, last_position))
+  table.insert(splited_texts, string.sub(text, last_position))
 
-  return splited_text
+  return splited_texts
 end
 
 function parse_connection_spec(connection_spec)
@@ -46,11 +46,6 @@ function fcopy(src_path, dst_path)
   dst_file:write(src_file:read('*all'))
   src_file:close()
   dst_file:close()
-end
-
-function send_file_to_vm(vm_ip, src_path, dst_path)
-  os.execute("scp -P 2222 -i .vagrant/machines/browser-protocol/virtualbox/private_key "..
-             src_path.." vagrant@"..vm_ip..":"..dst_path)
 end
 
 if #arg == 2 or #arg == 3 then
