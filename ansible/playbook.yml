@@ -28,6 +28,7 @@
       apt:
         name: "{{ item }}"
       with_items:
+        - vsftpd
         - fonts-noto-cjk
         - chromium-browser
     - name: Create empty passphrase key
