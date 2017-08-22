@@ -1,4 +1,6 @@
 local chrome_devtools = require("chrome-devtools-client")
+local ftp = require("socket.ftp")
+local ltn12 = require("ltn12")
 pgmoon = require("pgmoon-mashape")
 
 function split_text(text, delimiter)
@@ -40,39 +42,35 @@ function save_xml(connection_spec, xml)
                   "VALUES (XMLPARSE(DOCUMENT " .. pg:escape_literal(xml) .. "))"))
 end
 
-function fcopy(src_path, dst_path)
-  src_file = io.open(src_path, "r")
-  dst_file = io.open(dst_path, "w")
-  dst_file:write(src_file:read('*all'))
-  src_file:close()
-  dst_file:close()
-end
-
-if #arg == 2 or #arg == 3 then
-else
+if #arg ~= 2 then
   print("Usage: "..arg[0].." CONNECTION_SPEC SOURCE_HTML")
   print(" e.g.: "..arg[0].." 'database=test_db user=postgres' source.html")
-  return 1
+  os.exit(1)
 end
-
-if arg[3] == nil then
-  shared_directory_path = "./"
-else
-  shared_directory_path = arg[3]
-end
-
-fcopy(arg[2], shared_directory_path.."in.html")
 
 local connect_ip = "192.168.92.22"
 local connect_port = "9223"
+
+f, e = ftp.put{
+  host = connect_ip,
+  user = "vagrant",
+  password = "vagrant",
+  source = ltn12.source.file(io.open(arg[2], "r")),
+  command = "stor",
+  argument = "in.html",
+}
+if f == nil then
+  print(f,e)
+  os.exit(1)
+end
+
 local client = chrome_devtools.connect(connect_ip, connect_port)
 
-client:page_navigate("file:///vagrant/in.html")
+client:page_navigate("file:///home/vagrant/in.html")
 client:close()
 
 client = chrome_devtools.connect(connect_ip, connect_port)
 xml = client:convert_html_to_xml()
 save_xml(arg[1], xml)
 client:close()
-assert(os.remove(shared_directory_path.."in.html"))
 os.exit(0)
