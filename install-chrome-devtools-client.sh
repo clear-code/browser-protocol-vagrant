@@ -24,3 +24,7 @@ luarocks install chrome-devtools-client
 rm -rf ./cqueues
 rm -rf ./lua-cjson
 rm -rf ./luaossl
+
+curl https://raw.githubusercontent.com/clear-code/lua-chrome-devtools-client/master/convert-html-to-xml.lua > convert-html-to-xml.lua
+
+chromium-browser --headless --disable-gpu --remote-debugging-port=9222 &
